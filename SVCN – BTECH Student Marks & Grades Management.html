@@ -1,0 +1,624 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SVCN – BTECH Student Marks & Grades Management</title>
+<style>
+:root{--navy:#12305a;--blue:#1f6feb;--bg:#f3f6fb;--card:#fff;--line:#dbe3ef;--txt:#1b2a41;--mut:#6b7a90;--ok:#15803d;--bad:#b91c1c;--warn:#b45309;--gold:#d4a017}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+header{background:linear-gradient(135deg,var(--navy),#1d4f91);color:#fff;padding:18px 24px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:22px;letter-spacing:.3px}
+header p{margin:2px 0 0;opacity:.85;font-size:13px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:20px;font-size:12.5px}
+nav{background:#fff;border-bottom:1px solid var(--line);display:flex;overflow-x:auto;padding:0 16px;position:sticky;top:0;z-index:5}
+nav button{background:none;border:0;padding:14px 16px;font-size:14px;color:var(--mut);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;font-weight:600}
+nav button:hover{color:var(--navy)}
+nav button.active{color:var(--blue);border-bottom-color:var(--blue)}
+main{max-width:1280px;margin:0 auto;padding:20px}
+.tab{display:none}.tab.active{display:block}
+h2{margin:0 0 14px;font-size:18px;color:var(--navy)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(18,48,90,.05)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.stat{background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:10px;padding:14px}
+.stat b{display:block;font-size:26px;color:var(--navy)}
+.stat span{color:var(--mut);font-size:12.5px}
+.stat.g{border-left-color:var(--ok)}.stat.r{border-left-color:var(--bad)}.stat.y{border-left-color:var(--gold)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar .sp{flex:1}
+input,select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--txt)}
+input:focus,select:focus{outline:2px solid #bcd4fb;border-color:var(--blue)}
+.btn{font:inherit;font-weight:600;padding:8px 14px;border-radius:7px;border:1px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:#fff;color:var(--blue)}
+.btn.dng{background:#fff;color:var(--bad);border-color:#f0b4b4}
+.btn.sm{padding:4px 9px;font-size:12.5px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;background:#fff}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{background:#eaf0fa;color:var(--navy);font-size:12.5px;text-transform:uppercase;letter-spacing:.3px}
+th small{text-transform:none;color:var(--mut);font-weight:400}
+tbody tr:hover{background:#f8fbff}
+td.c,th.c{text-align:center}
+.num{text-align:center}
+tfoot td{background:#f1f5fb;font-weight:700;color:var(--navy);text-align:center}
+tfoot tr.last td{background:#e3ebf8;border-top:2px solid var(--navy)}
+tfoot td:first-child{text-align:right}
+.badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:700}
+.b-pass{background:#dcfce7;color:var(--ok)}.b-fail{background:#fee2e2;color:var(--bad)}
+.b-ab{background:#fef3c7;color:var(--warn)}.b-pr{background:#e0ecff;color:#1d4ed8}.b-pend{background:#eceff4;color:var(--mut)}
+.mi{width:70px;text-align:center;padding:6px}
+.mi:disabled{background:#f3f4f6;color:#aaa}
+.empty{text-align:center;color:var(--mut);padding:30px}
+.bar{height:10px;background:#e6edf8;border-radius:6px;overflow:hidden;min-width:100px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#1f6feb,#4aa3ff)}
+.podium{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px}
+.pod{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;text-align:center}
+.pod.r1{border:2px solid var(--gold);background:#fffbea}
+.pod .rk{font-size:30px}
+.pod b{display:block;font-size:16px;color:var(--navy)}
+.modal{position:fixed;inset:0;background:rgba(10,25,50,.5);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:12px;padding:22px;width:100%;max-width:460px}
+.mbox h3{margin:0 0 14px;color:var(--navy)}
+.fr{margin-bottom:12px}.fr label{display:block;font-weight:600;margin-bottom:4px;font-size:13px}
+.fr input,.fr select{width:100%}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:8px;opacity:0;transition:.3s;pointer-events:none;z-index:30}
+#toast.show{opacity:1}
+.note{color:var(--mut);font-size:12.5px;margin:6px 0 0}
+.mbox{max-height:92vh;overflow-y:auto}
+#form.mbox{max-width:540px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mgrid div label{font-weight:500;font-size:12px;color:var(--mut)}
+.mgrid input:disabled{background:#f3f4f6}
+.ferr{color:var(--bad);font-weight:600;min-height:18px;font-size:13px}
+.savebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.saved{color:var(--ok);font-weight:600;font-size:13px}
+/* report card */
+.rc{background:#fff;border:2px solid var(--navy);border-radius:6px;padding:22px;margin-bottom:20px;max-width:800px;margin-inline:auto}
+.rc .hd{text-align:center;border-bottom:2px solid var(--navy);padding-bottom:10px;margin-bottom:12px}
+.rc .hd h3{margin:0;font-size:22px;color:var(--navy);letter-spacing:1px}
+.rc .hd div{color:var(--mut);font-size:13px}
+.rc .info{display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;margin-bottom:12px}
+.rc .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
+.rc .sum div{border:1px solid var(--line);border-radius:6px;padding:8px;text-align:center}
+.rc .sum b{display:block;font-size:17px;color:var(--navy)}
+.rc .sign{display:flex;justify-content:space-between;margin-top:42px;font-size:13px}
+.rc .sign span{border-top:1px solid #444;padding-top:4px;min-width:140px;text-align:center}
+.rc .abs{text-align:center;font-size:24px;color:var(--warn);font-weight:700;padding:26px}
+footer{text-align:center;color:var(--mut);padding:18px;font-size:12.5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.two{grid-template-columns:1fr}.rc .info{grid-template-columns:1fr}}
+@media print{
+ header,nav,.noprint,footer,#toast,.modal{display:none!important}
+ body{background:#fff}main{padding:0;max-width:none}
+ .card{border:0;box-shadow:none;padding:0}
+ .rc{page-break-after:always;border:2px solid #000;margin:0 auto}
+ .rc:last-child{page-break-after:auto}
+ .tw{overflow:visible;border:0}
+ th{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header>
+ <div>
+  <h1 id="schoolName"></h1>
+  <p>Student Marks &amp; Grades Management System</p>
+ </div>
+ <div class="chips" id="chips"></div>
+</header>
+<nav id="nav">
+ <button data-tab="dash" class="active">Dashboard</button>
+ <button data-tab="students">Students</button>
+ <button data-tab="marks">Marks &amp; Attendance</button>
+ <button data-tab="rank">Topper &amp; Ranking</button>
+ <button data-tab="subject">Subject Report</button>
+ <button data-tab="cards">Report Cards</button>
+ <button data-tab="data">Import / Export</button>
+</nav>
+
+<main>
+<!-- DASHBOARD -->
+<section class="tab active" id="tab-dash">
+ <h2>Dashboard</h2>
+ <div class="grid" id="stats"></div>
+ <div class="two" style="margin-top:16px">
+  <div class="card"><h2>Grade Distribution</h2><div id="gradeDist"></div></div>
+  <div class="card"><h2>Grading Scale &amp; GPA Points</h2><div class="tw"><table id="scaleTbl"></table></div>
+   <p class="note" id="scaleNote"></p></div>
+ </div>
+</section>
+
+<!-- STUDENTS -->
+<section class="tab" id="tab-students">
+ <h2>Student Information</h2>
+ <div class="card">
+  <div class="toolbar">
+   <input id="q" placeholder="Search roll, name or phone…" style="min-width:240px">
+   <select id="gf"><option value="">All genders</option><option>Male</option><option>Female</option><option>Other</option></select>
+   <select id="af"><option value="">All attendance</option><option>Present</option><option>Absent</option></select>
+   <span class="sp"></span>
+   <button class="btn sec" id="seedBtn">Load 6 class students</button>
+   <button class="btn" id="addBtn">+ Add Student</button>
+  </div>
+  <div class="tw"><table><thead><tr><th>#</th><th>Roll Number</th><th>Student Name</th><th>Phone Number</th><th>Gender</th><th class="c">Attendance %</th><th>Exam</th><th class="c">Actions</th></tr></thead><tbody id="stBody"></tbody></table></div>
+  <p class="note" id="stCount"></p>
+ </div>
+</section>
+
+<!-- MARKS -->
+<section class="tab" id="tab-marks">
+ <h2>Marks Entry &amp; Exam Attendance</h2>
+ <div class="card">
+  <div class="toolbar">
+   <span id="attSummary"></span><span class="sp"></span>
+   <span class="saved" id="savedMsg"></span>
+   <button class="btn" id="saveMarks">💾 Save Marks</button>
+   <button class="btn sec" id="allPresent">Mark all Present</button>
+   <button class="btn sec noprint" onclick="window.print()">Print</button>
+  </div>
+  <p class="note" style="margin:0 0 10px">Enter marks for all students in one table. Mark a student <b>Absent</b> if they did not attend the exam – their marks are disabled and they are excluded from ranking and averages. Everything saves automatically.</p>
+  <div class="tw"><table><thead id="mkHead"></thead><tbody id="mkBody"></tbody><tfoot id="mkFoot"></tfoot></table></div>
+ </div>
+</section>
+
+<!-- RANK -->
+<section class="tab" id="tab-rank">
+ <h2>Class Topper &amp; Ranking List</h2>
+ <div class="podium" id="podium"></div>
+ <div class="card">
+  <div class="toolbar"><span class="sp"></span><button class="btn sec noprint" onclick="window.print()">Print Ranking</button></div>
+  <div class="tw"><table><thead><tr><th class="c">Rank</th><th>Roll</th><th>Name</th><th class="c">Total / Out of</th><th class="c">%</th><th class="c">Grade</th><th class="c">GPA</th><th class="c">Result</th></tr></thead><tbody id="rkBody"></tbody><tfoot id="rkFoot"></tfoot></table></div>
+  <p class="note">Only students who were present and have all subject marks entered are ranked. Equal totals share the same rank.</p>
+ </div>
+</section>
+
+<!-- SUBJECT -->
+<section class="tab" id="tab-subject">
+ <h2>Subject-wise Performance Report</h2>
+ <div class="card">
+  <div class="toolbar"><span class="sp"></span><button class="btn sec noprint" onclick="window.print()">Print Report</button></div>
+  <div class="tw"><table id="subTbl"></table></div>
+ </div>
+ <div class="card"><h2>Grade Distribution by Subject</h2><div class="tw"><table id="subGrade"></table></div></div>
+</section>
+
+<!-- CARDS -->
+<section class="tab" id="tab-cards">
+ <h2>Report Cards</h2>
+ <div class="card noprint">
+  <div class="toolbar">
+   <select id="rcSel" style="min-width:240px"></select>
+   <span class="sp"></span>
+   <button class="btn" onclick="window.print()">🖨 Print Report Card(s)</button>
+  </div>
+  <p class="note">Choose one student or "All students" (one card per page when printing).</p>
+ </div>
+ <div id="cardsOut"></div>
+</section>
+
+<!-- DATA -->
+<section class="tab" id="tab-data">
+ <h2>Import / Export &amp; Data</h2>
+ <div class="two">
+  <div class="card">
+   <h2>Import Students</h2>
+   <p class="note" style="margin-top:0">Upload an Excel (.xlsx/.xls) or CSV file. Columns: Roll Number, Student Name, Phone Number, Gender (optional: Attendance, and a column per subject for marks). Existing roll numbers are updated.</p>
+   <div class="toolbar"><input type="file" id="impFile" accept=".csv,.txt,.xlsx,.xls"></div>
+   <div class="toolbar"><button class="btn sec" id="tplBtn">Download CSV template</button></div>
+   <p id="impMsg" class="note"></p>
+  </div>
+  <div class="card">
+   <h2>Export</h2>
+   <div class="toolbar">
+    <button class="btn" id="expXlsx">Export Excel</button>
+    <button class="btn sec" id="expCsv">Export CSV</button>
+   </div>
+   <p class="note">Exports include marks, total, "out of", percentage, grade, GPA, result and rank, with class totals at the bottom.</p>
+   <h2 style="margin-top:18px">Backup &amp; Data</h2>
+   <div class="toolbar">
+    <button class="btn sec" id="bkBtn">Backup (JSON)</button>
+    <label class="btn sec" style="margin:0">Restore<input type="file" id="rsFile" accept=".json" hidden></label>
+    <button class="btn sec" id="sampleBtn">Load sample data</button>
+    <button class="btn dng" id="clearBtn">Delete all data</button>
+   </div>
+   <p class="note">Data is stored in this browser (localStorage). Use Backup to keep a copy or move to another computer.</p>
+  </div>
+ </div>
+</section>
+</main>
+
+<div class="modal" id="modal"><form class="mbox" id="form">
+ <h3 id="mTitle">Add Student</h3>
+ <div class="fr"><label>Roll Number *</label><input id="fRoll" required></div>
+ <div class="fr"><label>Student Name *</label><input id="fName" required></div>
+ <div class="fr"><label>Phone Number</label><input id="fPhone" inputmode="numeric" maxlength="15" placeholder="e.g. 9876543210"></div>
+ <div class="fr"><label>Gender *</label><select id="fGender" required><option>Male</option><option>Female</option><option>Other</option></select></div>
+ <div class="fr"><label>Exam Attendance</label><select id="fAtt"><option>Present</option><option>Absent</option></select></div>
+ <div class="fr"><label>Attendance Percentage (%) <small style="font-weight:400;color:#6b7a90">(75% or more required)</small></label><input id="fPct" type="number" min="0" max="100" step="0.1" placeholder="e.g. 85"></div>
+ <div class="fr"><label>Marks (out of 100) <small id="fMarksHint" style="font-weight:400;color:#6b7a90"></small></label><div class="mgrid" id="fMarks"></div></div>
+ <div id="fErr" class="ferr"></div>
+ <div class="acts"><button type="button" class="btn sec" id="mCancel">Cancel</button><button class="btn sec" type="button" id="saveNext">Save &amp; Add Next</button><button class="btn" type="submit">Save Student</button></div>
+</form></div>
+<div class="modal" id="askBox" style="z-index:40"><div class="mbox" style="max-width:380px"><h3>Please confirm</h3><p id="askMsg"></p><div class="acts"><button class="btn sec" id="askNo">Cancel</button><button class="btn dng" id="askYes">Yes, continue</button></div></div></div>
+<div id="toast"></div>
+<footer id="foot"></footer>
+
+<script>
+/* ================= CONFIGURATION (edit here) ================= */
+const CFG = {
+  school: 'SVCN', cls: 'BTECH', year: '2026-2027', exam: 'Examination',
+  max: 100, pass: 35,
+  subjects: ['Telugu','Hindi','English','Mathematics','Science','Social Studies'],
+  grades: [ // highest first. gp = grade point used for GPA
+    {g:'A+',min:90,max:100,gp:10},
+    {g:'A', min:80,max:89, gp:9},
+    {g:'B', min:70,max:79, gp:8},
+    {g:'C', min:60,max:69, gp:7},
+    {g:'D', min:50,max:59, gp:6},
+    {g:'E', min:35,max:49, gp:5},
+    {g:'F', min:0, max:34, gp:0}
+  ]
+};
+const KEY = 'svcn_btech_2026_2027_v1';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const r2 = x => Math.round(x*100)/100;
+const f2 = x => x == null ? '—' : r2(x).toFixed(2);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const OUT = CFG.subjects.length * CFG.max;
+
+/* ================= DATA ================= */
+/* Class list: attendance above 75%, all marks above 60 (order = CFG.subjects) */
+const SEED = [
+  {roll:'001',name:'Abhilash',att:79,m:[81,93,93,67,75,96]},
+  {roll:'002',name:'Haneesh', att:89,m:[97,96,92,98,89,76]},
+  {roll:'003',name:'Arjun',   att:76,m:[66,68,79,67,89,61]},
+  {roll:'004',name:'Siddhu',  att:97,m:[92,81,74,86,77,83]},
+  {roll:'005',name:'Chenchu', att:87,m:[85,93,65,82,66,96]},
+  {roll:'006',name:'Charan',  att:93,m:[79,79,90,70,97,80]}
+];
+const seedStudents = () => SEED.map(x => ({id:uid(), roll:x.roll, name:x.name, phone:'', gender:'Male', status:'Present', attPct:x.att, marks:Object.fromEntries(CFG.subjects.map((s,i)=>[s,x.m[i]]))}));
+let S = load();
+function load(){
+  try { const raw = localStorage.getItem(KEY); const d = raw ? JSON.parse(raw) : null; if (d && Array.isArray(d.students)) return d; } catch(e){}
+  return {students: seedStudents()};
+}
+let storageWarned = false;
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); const m = $('#savedMsg'); if (m) m.textContent = '✔ Saved ' + new Date().toLocaleTimeString(); return true; }
+  catch(e){ if (!storageWarned){ storageWarned = true; alert('This browser is blocking storage, so data will be lost when the page closes. Open the file directly in Chrome/Edge (double-click it) and use Import / Export → Backup regularly.'); } return false; }
+}
+function ask(msg){ return new Promise(res => { $('#askMsg').textContent = msg; $('#askBox').classList.add('open'); const done = v => { $('#askBox').classList.remove('open'); $('#askYes').onclick = $('#askNo').onclick = null; res(v); }; $('#askYes').onclick = () => done(true); $('#askNo').onclick = () => done(false); }); }
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('show'),2600); }
+const sorted = () => [...S.students].sort((a,b)=>String(a.roll).localeCompare(String(b.roll),undefined,{numeric:true}));
+const hasVal = v => v !== '' && v != null && !isNaN(v);
+
+function gradeOf(m){ for (const g of CFG.grades) if (m >= g.min) return g; return CFG.grades[CFG.grades.length-1]; }
+
+function calc(st){
+  if (st.status === 'Absent') return {absent:true};
+  const vals = CFG.subjects.map(s => hasVal(st.marks?.[s]) ? +st.marks[s] : null);
+  const entered = vals.filter(v => v !== null);
+  const total = entered.reduce((a,b)=>a+b,0);
+  const complete = entered.length === CFG.subjects.length;
+  const subs = vals.map(v => v === null ? null : gradeOf(v));
+  if (!complete) return {absent:false, complete:false, total, vals, subs, result:'Pending'};
+  const failed = vals.some(v => v < CFG.pass);
+  const pct = total / OUT * 100;
+  const gpa = subs.reduce((a,g)=>a+g.gp,0) / subs.length;
+  return {absent:false, complete:true, total, vals, subs, pct, gpa, failed, grade: failed ? 'F' : gradeOf(pct).g, result: failed ? 'Fail' : 'Pass'};
+}
+function ranks(){
+  const list = S.students.map(s => ({s, c:calc(s)})).filter(x => x.c.complete).sort((a,b)=>b.c.total-a.c.total);
+  const map = new Map(); let rank = 0, prev = null;
+  list.forEach((x,i)=>{ if (x.c.total !== prev){ rank = i+1; prev = x.c.total; } map.set(x.s.id, rank); });
+  return {list, map};
+}
+const resBadge = r => r==='Pass'?'<span class="badge b-pass">PASS</span>':r==='Fail'?'<span class="badge b-fail">FAIL</span>':r==='Absent'?'<span class="badge b-ab">ABSENT</span>':'<span class="badge b-pend">PENDING</span>';
+
+/* ================= TABS ================= */
+function showTab(t){
+  $$('.tab').forEach(e => e.classList.toggle('active', e.id === 'tab-'+t));
+  $$('#nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+  renderAll(); window.scrollTo(0,0);
+}
+$('#nav').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showTab(b.dataset.tab); });
+
+/* ================= RENDER ================= */
+function renderAll(){ renderHeader(); renderDash(); renderStudents(); renderMarks(); renderRank(); renderSubject(); renderCardsSel(); renderCards(); }
+
+function renderHeader(){
+  $('#schoolName').textContent = CFG.school + ' – ' + CFG.cls;
+  $('#chips').innerHTML = [`Academic Year: ${CFG.year}`, `Subjects: ${CFG.subjects.length}`, `Max Marks: ${CFG.max}`, `Pass Marks: ${CFG.pass}`, `Exam: One`].map(x=>`<span class="chip">${esc(x)}</span>`).join('');
+  $('#foot').textContent = `${CFG.school} • ${CFG.cls} • ${CFG.year} — Student Marks & Grades Management`;
+}
+
+function renderDash(){
+  const all = S.students.map(s => ({s, c:calc(s)}));
+  const present = all.filter(x => !x.c.absent), absent = all.length - present.length;
+  const done = all.filter(x => x.c.complete);
+  const pass = done.filter(x => x.c.result === 'Pass').length, fail = done.length - pass;
+  const avgPct = done.length ? done.reduce((a,x)=>a+x.c.pct,0)/done.length : null;
+  const avgGpa = done.length ? done.reduce((a,x)=>a+x.c.gpa,0)/done.length : null;
+  const {list} = ranks(); const top = list[0];
+  $('#stats').innerHTML = [
+    ['',all.length,'Total Students'],['g',present.length,'Present in Exam'],['y',absent,'Absent'],
+    ['g',pass,'Passed'],['r',fail,'Failed'],
+    ['',done.length ? r2(pass/done.length*100)+'%' : '—','Pass Percentage'],
+    ['',avgPct==null?'—':f2(avgPct)+'%','Class Average %'],['',avgGpa==null?'—':f2(avgGpa),'Average GPA'],
+    ['y',top?esc(top.s.name):'—','Class Topper' + (top ? ` (${top.c.total}/${OUT})` : '')]
+  ].map(([c,v,l])=>`<div class="stat ${c}"><b style="${String(v).length>10?'font-size:17px;padding:5px 0':''}">${v}</b><span>${l}</span></div>`).join('');
+  const maxC = Math.max(1, ...CFG.grades.map(g => done.filter(x => x.c.grade === g.g).length));
+  $('#gradeDist').innerHTML = done.length ? CFG.grades.map(g => { const n = done.filter(x=>x.c.grade===g.g).length;
+    return `<div style="display:flex;align-items:center;gap:10px;margin:7px 0"><b style="width:34px">${g.g}</b><div class="bar" style="flex:1"><i style="width:${n/maxC*100}%"></i></div><span style="width:30px;text-align:right">${n}</span></div>`; }).join('') : '<div class="empty">No completed marks yet.</div>';
+  $('#scaleTbl').innerHTML = '<thead><tr><th class="c">Grade</th><th class="c">Marks / %</th><th class="c">Grade Point</th></tr></thead><tbody>' +
+    CFG.grades.map(g=>`<tr><td class="c"><b>${g.g}</b></td><td class="c">${g.min} – ${g.max}</td><td class="c">${g.gp}</td></tr>`).join('') + '</tbody>';
+  $('#scaleNote').textContent = `GPA = average of the grade points of all ${CFG.subjects.length} subjects (equal weight). Pass mark is ${CFG.pass} in every subject; failing any subject gives overall Fail.`;
+}
+
+function renderStudents(){
+  const q = $('#q').value.trim().toLowerCase(), gf = $('#gf').value, af = $('#af').value;
+  const rows = sorted().filter(s => (!q || [s.roll,s.name,s.phone].some(v => String(v||'').toLowerCase().includes(q))) && (!gf || s.gender === gf) && (!af || s.status === af));
+  $('#stBody').innerHTML = rows.length ? rows.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.roll)}</td><td>${esc(s.name)}</td><td>${esc(s.phone)||'—'}</td><td>${esc(s.gender)}</td>
+    <td class="num">${hasVal(s.attPct)?`<span class="badge ${+s.attPct>=75?'b-pass':'b-fail'}">${r2(+s.attPct)}%</span>`:'—'}</td>
+    <td><span class="badge ${s.status==='Absent'?'b-ab':'b-pr'}">${s.status==='Absent'?'Absent':'Present'}</span></td>
+    <td class="c"><button class="btn sec sm" data-edit="${s.id}">Edit</button> <button class="btn dng sm" data-del="${s.id}">Delete</button></td></tr>`).join('')
+    : '<tr><td colspan="8" class="empty">No students found. Click “+ Add Student”, or import from Excel/CSV.</td></tr>';
+  $('#stCount').textContent = `Showing ${rows.length} of ${S.students.length} students`;
+}
+
+function renderMarks(){
+  const sts = sorted();
+  $('#mkHead').innerHTML = `<tr><th>#</th><th>Roll</th><th>Name</th><th>Attendance</th>${CFG.subjects.map(s=>`<th class="c">${esc(s)}<br><small>out of ${CFG.max}</small></th>`).join('')}<th class="c">Total<br><small>out of ${OUT}</small></th><th class="c">%</th><th class="c">Grade</th><th class="c">GPA</th><th class="c">Result</th></tr>`;
+  $('#mkBody').innerHTML = sts.length ? sts.map((s,i)=>`<tr data-row="${s.id}"><td>${i+1}</td><td>${esc(s.roll)}</td><td>${esc(s.name)}</td>
+    <td><select data-att="${s.id}"><option${s.status!=='Absent'?' selected':''}>Present</option><option${s.status==='Absent'?' selected':''}>Absent</option></select></td>
+    ${CFG.subjects.map(sub=>`<td class="c"><input class="mi" type="number" min="0" max="${CFG.max}" step="0.5" data-id="${s.id}" data-sub="${esc(sub)}" value="${hasVal(s.marks?.[sub])?s.marks[sub]:''}" ${s.status==='Absent'?'disabled':''}></td>`).join('')}
+    <td class="num" data-c="tot"></td><td class="num" data-c="pct"></td><td class="num" data-c="gr"></td><td class="num" data-c="gpa"></td><td class="num" data-c="res"></td></tr>`).join('')
+    : `<tr><td colspan="${CFG.subjects.length+9}" class="empty">Add students first (Students tab) or import them.</td></tr>`;
+  sts.forEach(s => updateRow(s.id)); updateFoot();
+}
+function updateRow(id){
+  const s = S.students.find(x=>x.id===id), tr = $(`tr[data-row="${id}"]`); if (!s||!tr) return;
+  const c = calc(s), set = (k,v)=>{ tr.querySelector(`[data-c="${k}"]`).innerHTML = v; };
+  if (c.absent){ set('tot','—'); set('pct','—'); set('gr','AB'); set('gpa','—'); set('res', resBadge('Absent')); return; }
+  set('tot', `<b>${r2(c.total)}</b> / ${OUT}`);
+  set('pct', c.complete ? f2(c.pct) : '—'); set('gr', c.complete ? `<b>${c.grade}</b>` : '—'); set('gpa', c.complete ? f2(c.gpa) : '—'); set('res', resBadge(c.result));
+}
+function updateFoot(){
+  const pres = S.students.filter(s => s.status !== 'Absent'), n = pres.length;
+  const col = CFG.subjects.map(sub => { let t=0,c=0; pres.forEach(s=>{ const v=s.marks?.[sub]; if (hasVal(v)){ t+=+v; c++; } }); return {t,c}; });
+  const grand = col.reduce((a,x)=>a+x.t,0), cnt = col.reduce((a,x)=>a+x.c,0);
+  const k = 4, rest = 4;
+  $('#mkFoot').innerHTML = !S.students.length ? '' :
+   `<tr><td colspan="${k}">TOTAL MARKS OBTAINED (Present students)</td>${col.map(x=>`<td>${r2(x.t)}</td>`).join('')}<td>${r2(grand)}</td><td colspan="${rest}"></td></tr>
+    <tr><td colspan="${k}">AVERAGE MARKS</td>${col.map(x=>`<td>${x.c?f2(x.t/x.c):'—'}</td>`).join('')}<td>${n?f2(grand/n):'—'}</td><td colspan="${rest}"></td></tr>
+    <tr class="last"><td colspan="${k}">OUT OF (${n} present × ${CFG.max})</td>${col.map(()=>`<td>${n*CFG.max}</td>`).join('')}<td>${n*OUT}</td><td colspan="${rest}"></td></tr>`;
+  const ab = S.students.length - n;
+  $('#attSummary').innerHTML = `<span class="badge b-pr">Present: ${n}</span> <span class="badge b-ab">Absent: ${ab}</span> <span class="badge b-pend">Total: ${S.students.length}</span> <span class="badge b-pend">Marks entered: ${cnt}/${n*CFG.subjects.length}</span>`;
+}
+
+function renderRank(){
+  const {list, map} = ranks();
+  const medals = ['🥇','🥈','🥉'];
+  const top = list.filter(x => map.get(x.s.id) <= 3).slice(0,6);
+  $('#podium').innerHTML = top.length ? top.map(x => { const r = map.get(x.s.id);
+    return `<div class="pod ${r===1?'r1':''}"><div class="rk">${medals[r-1]||r}</div><b>${esc(x.s.name)}</b><span>Roll ${esc(x.s.roll)}</span><div style="margin-top:6px"><b>${r2(x.c.total)} / ${OUT}</b>${f2(x.c.pct)}% • Grade ${x.c.grade} • GPA ${f2(x.c.gpa)}</div>${r===1?'<div class="badge b-ab" style="margin-top:6px">CLASS TOPPER</div>':''}</div>`; }).join('') : '<div class="card empty" style="grid-column:1/-1">Ranking appears once students have complete marks.</div>';
+  $('#rkBody').innerHTML = list.length ? list.map(x=>`<tr><td class="num"><b>${map.get(x.s.id)}</b></td><td>${esc(x.s.roll)}</td><td>${esc(x.s.name)}</td><td class="num">${r2(x.c.total)} / ${OUT}</td><td class="num">${f2(x.c.pct)}</td><td class="num"><b>${x.c.grade}</b></td><td class="num">${f2(x.c.gpa)}</td><td class="num">${resBadge(x.c.result)}</td></tr>`).join('') : '<tr><td colspan="8" class="empty">No ranked students yet.</td></tr>';
+  const t = list.reduce((a,x)=>a+x.c.total,0);
+  $('#rkFoot').innerHTML = list.length ? `<tr class="last"><td colspan="3">TOTAL (${list.length} ranked students)</td><td>${r2(t)} / ${list.length*OUT}</td><td>${f2(t/(list.length*OUT)*100)}</td><td colspan="3"></td></tr>` : '';
+}
+
+function renderSubject(){
+  const pres = S.students.filter(s => s.status !== 'Absent'), absN = S.students.length - pres.length;
+  const rows = CFG.subjects.map(sub => {
+    const e = pres.filter(s => hasVal(s.marks?.[sub])).map(s => ({s, v:+s.marks[sub]}));
+    const p = e.filter(x => x.v >= CFG.pass).length, tot = e.reduce((a,x)=>a+x.v,0);
+    const hi = e.length ? Math.max(...e.map(x=>x.v)) : null, lo = e.length ? Math.min(...e.map(x=>x.v)) : null;
+    const tp = e.filter(x => x.v === hi).map(x => x.s.name).join(', ');
+    return {sub, n:e.length, p, f:e.length-p, avg:e.length?tot/e.length:null, hi, lo, tp, tot, e};
+  });
+  $('#subTbl').innerHTML = `<thead><tr><th>Subject</th><th class="c">Appeared</th><th class="c">Absent</th><th class="c">Passed</th><th class="c">Failed</th><th class="c">Pass %</th><th class="c">Average</th><th class="c">Highest</th><th class="c">Lowest</th><th>Subject Topper</th><th>Average bar</th></tr></thead><tbody>` +
+    rows.map(r=>`<tr><td><b>${esc(r.sub)}</b></td><td class="num">${r.n}</td><td class="num">${absN}</td><td class="num">${r.p}</td><td class="num">${r.f}</td><td class="num">${r.n?f2(r.p/r.n*100)+'%':'—'}</td><td class="num">${f2(r.avg)}</td><td class="num">${r.hi??'—'}</td><td class="num">${r.lo??'—'}</td><td>${esc(r.tp)||'—'}</td><td><div class="bar"><i style="width:${r.avg?r.avg/CFG.max*100:0}%"></i></div></td></tr>`).join('') +
+    `</tbody><tfoot><tr><td>TOTAL / OUT OF</td><td>${rows.reduce((a,r)=>a+r.n,0)}</td><td>${absN*rows.length}</td><td>${rows.reduce((a,r)=>a+r.p,0)}</td><td>${rows.reduce((a,r)=>a+r.f,0)}</td><td colspan="2">Marks: ${r2(rows.reduce((a,r)=>a+r.tot,0))} / ${pres.length*OUT}</td><td colspan="4"></td></tr></tfoot>`;
+  $('#subGrade').innerHTML = `<thead><tr><th>Subject</th>${CFG.grades.map(g=>`<th class="c">${g.g}</th>`).join('')}</tr></thead><tbody>` +
+    rows.map(r=>`<tr><td><b>${esc(r.sub)}</b></td>${CFG.grades.map(g=>`<td class="num">${r.e.filter(x=>gradeOf(x.v).g===g.g).length}</td>`).join('')}</tr>`).join('') + '</tbody>';
+}
+
+function renderCardsSel(){
+  const sel = $('#rcSel'), cur = sel.value;
+  sel.innerHTML = '<option value="">All students</option>' + sorted().map(s=>`<option value="${s.id}">${esc(s.roll)} – ${esc(s.name)}</option>`).join('');
+  if ([...sel.options].some(o=>o.value===cur)) sel.value = cur;
+}
+function reportCard(s, rank){
+  const c = calc(s);
+  const head = `<div class="hd"><h3>${esc(CFG.school)}</h3><div>${esc(CFG.cls)} • Academic Year ${esc(CFG.year)}</div><div><b>PROGRESS / REPORT CARD</b></div></div>
+   <div class="info"><div><b>Roll Number:</b> ${esc(s.roll)}</div><div><b>Student Name:</b> ${esc(s.name)}</div><div><b>Phone:</b> ${esc(s.phone)||'—'}</div><div><b>Gender:</b> ${esc(s.gender)}</div><div><b>Attendance:</b> ${hasVal(s.attPct)?r2(+s.attPct)+'%':'—'}</div></div>`;
+  if (c.absent) return `<div class="rc">${head}<div class="abs">ABSENT IN EXAMINATION</div><div class="sign"><span>Class Teacher</span><span>Principal</span></div></div>`;
+  const body = CFG.subjects.map((sub,i)=>`<tr><td>${esc(sub)}</td><td class="num">${CFG.max}</td><td class="num">${CFG.pass}</td><td class="num"><b>${c.vals[i]??'—'}</b></td><td class="num">${c.subs[i]?c.subs[i].g:'—'}</td><td class="num">${c.subs[i]?c.subs[i].gp:'—'}</td><td class="num">${c.vals[i]==null?'—':c.vals[i]>=CFG.pass?'Pass':'Fail'}</td></tr>`).join('');
+  return `<div class="rc">${head}<table><thead><tr><th>Subject</th><th class="c">Max</th><th class="c">Pass</th><th class="c">Marks</th><th class="c">Grade</th><th class="c">Grade Point</th><th class="c">Status</th></tr></thead><tbody>${body}</tbody>
+   <tfoot><tr class="last"><td>TOTAL / OUT OF</td><td>${OUT}</td><td></td><td>${r2(c.total)}</td><td colspan="3">${r2(c.total)} out of ${OUT}</td></tr></tfoot></table>
+   <div class="sum"><div><b>${c.complete?f2(c.pct)+'%':'—'}</b>Percentage</div><div><b>${c.complete?c.grade:'—'}</b>Grade</div><div><b>${c.complete?f2(c.gpa):'—'}</b>GPA</div><div><b>${rank||'—'}</b>Class Rank</div><div><b>${c.result.toUpperCase()}</b>Result</div></div>
+   <div class="sign"><span>Class Teacher</span><span>Parent / Guardian</span><span>Principal</span></div></div>`;
+}
+function renderCards(){
+  const id = $('#rcSel').value, {map} = ranks();
+  const sts = id ? S.students.filter(s=>s.id===id) : sorted();
+  $('#cardsOut').innerHTML = sts.length ? sts.map(s=>reportCard(s, map.get(s.id))).join('') : '<div class="card empty">No students to show.</div>';
+}
+
+/* ================= STUDENT FORM ================= */
+let editId = null;
+function openForm(id){
+  editId = id || null; const s = id ? S.students.find(x=>x.id===id) : null;
+  $('#mTitle').textContent = s ? 'Edit Student' : 'Add Student';
+  $('#fRoll').value = s?.roll || ''; $('#fName').value = s?.name || ''; $('#fPhone').value = s?.phone || '';
+  $('#fGender').value = s?.gender || 'Male'; $('#fAtt').value = s?.status || 'Present'; $('#fPct').value = hasVal(s?.attPct) ? s.attPct : '';
+  $('#fMarks').innerHTML = CFG.subjects.map((sub,i)=>`<div><label>${esc(sub)}</label><input type="number" min="0" max="${CFG.max}" step="0.5" data-fm="${esc(sub)}" value="${hasVal(s?.marks?.[sub])?s.marks[sub]:''}" placeholder="0-${CFG.max}"></div>`).join('');
+  $('#fErr').textContent = ''; toggleFormMarks();
+  $('#modal').classList.add('open'); $('#fRoll').focus();
+}
+function toggleFormMarks(){ const ab = $('#fAtt').value === 'Absent'; $$('#fMarks input').forEach(i => i.disabled = ab); $('#fMarksHint').textContent = ab ? '(disabled – student is absent)' : '(leave blank if not yet available)'; }
+$('#fAtt').addEventListener('change', toggleFormMarks);
+const closeForm = () => $('#modal').classList.remove('open');
+$('#addBtn').onclick = () => openForm(); $('#mCancel').onclick = closeForm;
+let addNext = false;
+$('#saveNext').onclick = () => { addNext = true; $('#form').requestSubmit(); };
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  const next = addNext; addNext = false;
+  const err = m => { $('#fErr').textContent = m; };
+  const roll = $('#fRoll').value.trim(), name = $('#fName').value.trim(), phone = $('#fPhone').value.trim();
+  if (!roll || !name) return err('Roll number and student name are required.');
+  if (phone && !/^\d{7,15}$/.test(phone)) return err('Phone number must contain digits only (7–15 digits).');
+  if (S.students.some(s => s.id !== editId && String(s.roll).toLowerCase() === roll.toLowerCase())) return err('Roll number "' + roll + '" already exists.');
+  const status = $('#fAtt').value, marks = {};
+  for (const i of $$('#fMarks input')){
+    if (status === 'Absent' || i.value.trim() === '') continue;
+    const v = +i.value; if (isNaN(v) || v < 0 || v > CFG.max) return err(`${i.dataset.fm}: marks must be between 0 and ${CFG.max}.`);
+    marks[i.dataset.fm] = v;
+  }
+  const pv = $('#fPct').value.trim();
+  if (pv !== '' && (isNaN(pv) || +pv < 0 || +pv > 100)) return err('Attendance percentage must be between 0 and 100.');
+  const data = {roll, name, phone, gender:$('#fGender').value, status, attPct: pv === '' ? '' : +pv};
+  if (editId){ const st = Object.assign(S.students.find(s=>s.id===editId), data); st.marks = status === 'Absent' ? (st.marks||{}) : Object.assign({}, marks); }
+  else S.students.push({id:uid(), ...data, marks});
+  const wasEdit = !!editId, ok = save(); renderAll();
+  toast(ok ? (wasEdit ? 'Student updated & saved' : 'Student added & saved') : 'Added (not stored – browser blocks storage)');
+  if (next){ openForm(); $('#fErr').textContent = ''; } else closeForm();
+});
+$('#stBody').addEventListener('click', async e => {
+  const ed = e.target.closest('[data-edit]'), dl = e.target.closest('[data-del]');
+  if (ed) openForm(ed.dataset.edit);
+  if (dl){ const s = S.students.find(x=>x.id===dl.dataset.del); if (s && await ask(`Delete ${s.name} (${s.roll}) and their marks?`)){ S.students = S.students.filter(x=>x.id!==s.id); save(); renderAll(); toast('Student deleted'); } }
+});
+$('#saveMarks').onclick = () => { const ok = save(); renderAll(); toast(ok ? 'Marks saved' : 'Could not save – browser blocks storage'); };
+['q','gf','af'].forEach(i => $('#'+i).addEventListener('input', renderStudents));
+
+/* marks entry events */
+$('#mkBody').addEventListener('input', e => {
+  const t = e.target; if (!t.dataset.sub) return;
+  const s = S.students.find(x=>x.id===t.dataset.id); if (!s) return;
+  let v = t.value; if (v !== ''){ v = +v; if (v > CFG.max){ v = CFG.max; t.value = v; } if (v < 0){ v = 0; t.value = 0; } }
+  s.marks = s.marks || {}; s.marks[t.dataset.sub] = v; save(); updateRow(s.id); updateFoot();
+});
+$('#mkBody').addEventListener('change', e => {
+  const id = e.target.dataset.att; if (!id) return;
+  S.students.find(x=>x.id===id).status = e.target.value; save(); renderMarks();
+});
+$('#allPresent').onclick = () => { S.students.forEach(s=>s.status='Present'); save(); renderMarks(); toast('All marked Present'); };
+$('#rcSel').addEventListener('change', renderCards);
+
+/* ================= EXPORT / IMPORT ================= */
+function dl(name, content, type){ const b = new Blob([content],{type}), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500); }
+function exportRows(){
+  const {map} = ranks();
+  const head = ['Roll Number','Student Name','Phone Number','Gender','Attendance','Attendance Percentage',...CFG.subjects,'Total','Out Of','Percentage','Grade','GPA','Result','Rank'];
+  const rows = sorted().map(s => { const c = calc(s);
+    return [s.roll,s.name,s.phone,s.gender,s.status==='Absent'?'Absent':'Present',hasVal(s.attPct)?+s.attPct:'',...CFG.subjects.map(x=>hasVal(s.marks?.[x])&&!c.absent?+s.marks[x]:''),
+      c.absent?'':r2(c.total), c.absent?'':OUT, c.complete?r2(c.pct):'', c.absent?'AB':(c.complete?c.grade:''), c.complete?r2(c.gpa):'', c.absent?'Absent':c.result, map.get(s.id)||'']; });
+  const pres = S.students.filter(s=>s.status!=='Absent'), n = pres.length;
+  const tots = CFG.subjects.map(sub => pres.reduce((a,s)=>a+(hasVal(s.marks?.[sub])?+s.marks[sub]:0),0));
+  const g = tots.reduce((a,b)=>a+b,0);
+  rows.push(['','TOTAL','','','','',...tots.map(r2),r2(g),'','','','','','']);
+  rows.push(['','OUT OF','','','','',...CFG.subjects.map(()=>n*CFG.max),n*OUT,'','','','','','']);
+  return [head,...rows];
+}
+const csvCell = v => { v = String(v ?? ''); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
+$('#expCsv').onclick = () => { if (!S.students.length) return toast('No data to export'); dl(`${CFG.school}_${CFG.cls}_${CFG.year}.csv`, '\ufeff'+exportRows().map(r=>r.map(csvCell).join(',')).join('\r\n'), 'text/csv;charset=utf-8'); };
+let xlsxP = null;
+function loadXLSX(){
+  if (window.XLSX) return Promise.resolve(true);
+  if (!xlsxP) xlsxP = new Promise(res => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload = () => res(true); sc.onerror = () => { xlsxP = null; res(false); }; document.head.appendChild(sc); });
+  return xlsxP;
+}
+$('#expXlsx').onclick = async () => {
+  if (!S.students.length) return toast('No data to export');
+  const rows = exportRows(), name = `${CFG.school}_${CFG.cls}_${CFG.year}`;
+  if (await loadXLSX()){ const ws = XLSX.utils.aoa_to_sheet(rows), wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Marks'); XLSX.writeFile(wb, name+'.xlsx'); }
+  else { const t = '<html><head><meta charset="utf-8"></head><body><table border="1">' + rows.map(r=>'<tr>'+r.map(c=>`<td>${esc(c)}</td>`).join('')+'</tr>').join('') + '</table></body></html>'; dl(name+'.xls', t, 'application/vnd.ms-excel'); toast('Offline: exported as .xls (opens in Excel)'); }
+};
+function parseCSV(t){
+  const rows = []; let r = [], c = '', q = false; t = t.replace(/^\ufeff/,'');
+  for (let i=0;i<t.length;i++){ const ch = t[i];
+    if (q){ if (ch === '"'){ if (t[i+1]==='"'){ c+='"'; i++; } else q=false; } else c+=ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ','){ r.push(c); c=''; }
+    else if (ch === '\n' || ch === '\r'){ if (ch==='\r' && t[i+1]==='\n') i++; r.push(c); c=''; rows.push(r); r=[]; }
+    else c+=ch; }
+  if (c !== '' || r.length){ r.push(c); rows.push(r); }
+  return rows;
+}
+const norm = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]/g,'');
+function importRows(rows){
+  rows = rows.filter(r => r.some(c => String(c ?? '').trim() !== ''));
+  const find = (names, hdr) => hdr.findIndex(h => names.includes(h));
+  let hi = rows.findIndex(r => r.map(norm).some(h => ['rollnumber','rollno','roll','studentname','name'].includes(h)));
+  let hdr, data;
+  if (hi >= 0){ hdr = rows[hi].map(norm); data = rows.slice(hi+1); } else { hdr = ['rollnumber','studentname','phonenumber','gender']; data = rows; }
+  const ix = { roll:find(['rollnumber','rollno','roll','regno','htno'],hdr), name:find(['studentname','name'],hdr), phone:find(['phonenumber','phone','mobile','mobilenumber','contact'],hdr), gender:find(['gender','sex'],hdr), att:find(['attendance','status','present'],hdr), pct:find(['attendancepercentage','attendancepercent','attendancepct','attpercentage'],hdr) };
+  const sx = CFG.subjects.map(s => hdr.indexOf(norm(s)));
+  let add = 0, upd = 0, skip = 0;
+  data.forEach(r => {
+    const g = i => i >= 0 ? String(r[i] ?? '').trim() : '';
+    const roll = g(ix.roll), name = g(ix.name);
+    if (!roll || !name){ skip++; return; }
+    let gen = g(ix.gender); gen = /^m/i.test(gen) ? 'Male' : /^f/i.test(gen) ? 'Female' : gen ? 'Other' : 'Male';
+    const att = /^(a|ab|absent)/i.test(g(ix.att)) ? 'Absent' : 'Present';
+    let s = S.students.find(x => String(x.roll).toLowerCase() === roll.toLowerCase());
+    if (s){ Object.assign(s,{name, gender:gen, status:att}); if (ix.phone>=0) s.phone = g(ix.phone); upd++; }
+    else { s = {id:uid(), roll, name, phone:g(ix.phone).replace(/\D/g,'').slice(-10), gender:gen, status:att, marks:{}}; S.students.push(s); add++; }
+    s.marks = s.marks || {};
+    if (ix.pct >= 0 && g(ix.pct) !== '' && !isNaN(g(ix.pct))) s.attPct = Math.min(100, Math.max(0, +g(ix.pct)));
+    sx.forEach((c,i) => { if (c >= 0){ const v = String(r[c] ?? '').trim(); if (v !== '' && !isNaN(v)) s.marks[CFG.subjects[i]] = Math.min(CFG.max, Math.max(0, +v)); } });
+  });
+  save(); renderAll();
+  $('#impMsg').textContent = `Import complete: ${add} added, ${upd} updated, ${skip} skipped (missing roll/name).`; toast('Import complete');
+}
+$('#impFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    if (/\.(xlsx|xls)$/i.test(f.name)){
+      if (!(await loadXLSX())){ $('#impMsg').textContent = 'Excel import needs an internet connection once. Save the sheet as CSV and import that instead.'; return; }
+      const wb = XLSX.read(await f.arrayBuffer(), {type:'array'});
+      importRows(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, defval:''}));
+    } else importRows(parseCSV(await f.text()));
+  } catch(err){ $('#impMsg').textContent = 'Could not read file: ' + err.message; }
+  e.target.value = '';
+});
+$('#tplBtn').onclick = () => dl('students_template.csv', 'Roll Number,Student Name,Phone Number,Gender,Attendance,Attendance Percentage,' + CFG.subjects.join(',') + '\r\n1,Sample Student,9876543210,Male,Present,85,' + CFG.subjects.map(()=>'').join(',') + '\r\n', 'text/csv');
+$('#bkBtn').onclick = () => dl(`${CFG.school}_backup.json`, JSON.stringify(S,null,1), 'application/json');
+$('#rsFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { const d = JSON.parse(await f.text()); if (!Array.isArray(d.students)) throw new Error('Invalid backup'); if (await ask('Replace current data with this backup?')){ S = d; save(); renderAll(); toast('Backup restored'); } } catch(err){ toast('Invalid backup file'); }
+  e.target.value = '';
+});
+$('#clearBtn').onclick = async () => { if (await ask('Delete ALL students and marks? This cannot be undone.')){ S = {students:[]}; save(); renderAll(); toast('All data deleted'); } };
+$('#sampleBtn').onclick = async () => {
+  if (S.students.length && !(await ask('Add sample students to existing data?'))) return;
+  const names = [['Aarav Reddy','Male'],['Sneha Kumari','Female'],['Karthik Rao','Male'],['Lakshmi Devi','Female'],['Rahul Varma','Male'],['Priya Sharma','Female'],['Imran Khan','Male'],['Divya Teja','Female']];
+  const m = [[88,92,85,96,91,89],[72,68,80,74,70,77],[45,38,52,41,36,48],[95,91,97,99,94,92],[30,42,55,28,40,46],[0,0,0,0,0,0],[66,71,69,63,75,68],[0,0,0,0,0,0]];
+  const base = S.students.length;
+  names.forEach((n,i) => { const ab = i===5||i===7, marks = {}; if (!ab) CFG.subjects.forEach((s,j)=>marks[s]=m[i][j]);
+    S.students.push({id:uid(), roll:String(base+i+1).padStart(3,'0'), name:n[0], phone:'98765432'+String(10+i), gender:n[1], status:ab?'Absent':'Present', marks}); });
+  save(); renderAll(); toast('Sample data loaded');
+};
+$('#seedBtn').onclick = () => {
+  let add = 0, upd = 0;
+  seedStudents().forEach(n => { const ex = S.students.find(s => String(s.roll).toLowerCase() === n.roll.toLowerCase() || s.name.toLowerCase() === n.name.toLowerCase());
+    if (ex){ Object.assign(ex, {name:n.name, status:'Present', attPct:n.attPct, marks:n.marks}); upd++; } else { S.students.push(n); add++; } });
+  save(); renderAll(); toast(`Class list loaded: ${add} added, ${upd} updated`);
+};
+save();
+window.addEventListener('keydown', e => { if (e.key === 'Escape') closeForm(); });
+renderAll();
+</script>
+</body>
+</html>
+
+</body></html>
